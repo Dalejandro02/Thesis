@@ -6,6 +6,80 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
+// Definiciones para la pantalla OLED
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
+
+// Logo para la pantalla OLED
+const unsigned char logo[] PROGMEM = {
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xe0, 0x07, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xfc, 0x3f, 0x7c, 0x3f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xf0, 0xfe, 0x7f, 0x0f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xe3, 0xe0, 0x07, 0xc7, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x8f, 0x00, 0x00, 0xe1, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x1c, 0x1c, 0x38, 0x78, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x38, 0xfc, 0x1f, 0x1c, 0x7f, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xfe, 0x71, 0xe0, 0x07, 0x8e, 0x7f, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xfc, 0xe7, 0x80, 0x01, 0xc7, 0x3f, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xf8, 0xce, 0x10, 0x00, 0xe3, 0x1f, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xf1, 0x9c, 0x60, 0x03, 0x39, 0x8f, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xf3, 0x39, 0xc2, 0x41, 0x1c, 0xcf, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xf3, 0x33, 0x86, 0x61, 0x8c, 0xcf, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xe6, 0x63, 0x0e, 0x70, 0xce, 0x67, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xe6, 0x67, 0x0c, 0x78, 0xe6, 0x67, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xc6, 0xce, 0x1c, 0x38, 0x67, 0x37, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xcc, 0xce, 0x1e, 0x7c, 0x73, 0x33, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xcc, 0xcc, 0x3e, 0x7e, 0x33, 0x33, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xcc, 0x9c, 0x2e, 0x76, 0x3b, 0x33, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xcc, 0x9c, 0x7e, 0x76, 0x39, 0x93, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xcc, 0x9c, 0x76, 0x6e, 0x39, 0x93, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xcc, 0x98, 0x7a, 0x5f, 0x19, 0x93, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xcc, 0x98, 0x7c, 0x3f, 0x19, 0x93, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xcc, 0x9c, 0x7e, 0x7e, 0x39, 0x93, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xcc, 0x9c, 0x6e, 0x7a, 0x31, 0x93, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xcc, 0xcc, 0x2e, 0x7a, 0x33, 0x33, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xcc, 0xce, 0x36, 0x76, 0x33, 0x33, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xc6, 0xce, 0x12, 0x6c, 0x73, 0x37, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xe6, 0x67, 0x08, 0x58, 0xe6, 0x67, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xe6, 0x73, 0x8e, 0x30, 0xc6, 0x67, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xe3, 0x31, 0xc2, 0x41, 0xcc, 0x6f, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xf3, 0x38, 0xe0, 0x03, 0x9c, 0xcf, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xf1, 0x9c, 0x78, 0x0f, 0x39, 0xcf, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xf8, 0x8e, 0x3e, 0x7c, 0x71, 0x9f, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xfc, 0xc7, 0x0e, 0x70, 0xe3, 0x1f, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xfc, 0x63, 0xc0, 0x03, 0xc6, 0x3f, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xfe, 0x30, 0xfb, 0xdf, 0x0e, 0x7f, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x1e, 0x1f, 0xf8, 0x78, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x87, 0x03, 0xc0, 0xf1, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xc3, 0xe1, 0x87, 0xc7, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xf0, 0xff, 0xff, 0x0f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xfc, 0x1f, 0xfc, 0x3f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xe0, 0x03, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0x0c, 0xff, 0xfc, 0x07, 0xe0, 0x3f, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xf8, 0x00, 0xff, 0xfc, 0x07, 0xc0, 0x3f, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xf0, 0x00, 0xff, 0xfc, 0x03, 0xc0, 0x3f, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xf0, 0xf8, 0xff, 0xff, 0x23, 0xc8, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xe1, 0xfc, 0xff, 0xff, 0x23, 0x88, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xe1, 0xff, 0xf0, 0x1f, 0x21, 0x98, 0xf8, 0x0f, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xe3, 0xff, 0xe0, 0x0f, 0x31, 0x18, 0xf0, 0x07, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xe3, 0xff, 0xe3, 0x8f, 0x30, 0x38, 0xf1, 0xc7, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xe1, 0xfd, 0xc3, 0x8f, 0x38, 0x38, 0xf1, 0xc3, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xe1, 0xfc, 0x43, 0xcf, 0x38, 0x38, 0xf3, 0xc3, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xf1, 0xf8, 0xc3, 0x8f, 0x38, 0x78, 0xf1, 0xc3, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xf0, 0x70, 0xe3, 0x8f, 0x3c, 0x78, 0xf1, 0xc7, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xf0, 0x00, 0xe0, 0x0c, 0x0c, 0x60, 0x30, 0x07, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xfc, 0x01, 0xf0, 0x1c, 0x0c, 0xe0, 0x38, 0x0f, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0x0f, 0xfc, 0x7f, 0xff, 0xff, 0xfe, 0x3f, 0xff, 0xff, 0xff, 0xff, 
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+};
+
+// Configuración de red y URLs
 const char* ssid = "Proyecto_IOT";
 const char* password = "Pr0yect010T";
 const char* dbUrl = "http://192.168.128.77:8080/db_access.php"; 
@@ -14,26 +88,104 @@ const char* controlUrls[] = {
   "http://172.31.0.112/activar",
   "http://172.31.0.113/activar"
 };
+
+// Variables globales
 const int delayLoop = 2;
 String tagAnterior = "", serverDate = "", serverTime = "";
 int totalPages = 1, serverMinutes = 0, horaInicioMin = 0, horaFinalMin = 0;
-static bool tarjetaInvalida = false, retiroTarjeta = false, accesoPermitido = false; //tarjeta invalida es una variable que se utiliza en el loop de comparación
-//esta variable determina si la tarjeta que se ingresó es valida o no, y redirecciona a los otros casos acorde a su valor.
-//DEBE INICIAR EN FALSE, SI ESTA EN TRUE ES CON EL PROPOSITO DE PROBAR FUNCIONES. // retiroTarjeta es un booleano que muestra el estado anterior del sistema, esto para verificar si el sistema 
-//antes de que cambiara estaba en una reserva activa o no true = retiro la tarjeta false = no ha retirado la tarjeta
-// Configuración de pines
-int horaInicio = 0, horaFinal = 0;
+static bool tarjetaInvalida = false, retiroTarjeta = false, accesoPermitido = false; 
 
-#define PIN_SDA  D8     // SDA del RC522
-#define PIN_RST  D3     // RST del RC522
-#define PIN_BOTON D0    // Pulsador activado por la tarjeta
+// Configuración de pines
+#define PIN_SDA   D8     // SDA del RC522
+#define PIN_RST   D3     // RST del RC522
+#define PIN_BOTON D0     // Pulsador activado por la tarjeta
 #define buzzer D4
 
 MFRC522 rfid(PIN_SDA, PIN_RST);
 
-void iniciarApagado() {
-  buzzSound(3,200);
-  Serial.println("0");
+// --- FUNCIONES DE AYUDA ---
+
+void mostrarAcceso(bool permitido) {
+  display.clearDisplay();
+  display.setTextSize(2);
+  display.setTextColor(WHITE);
+  display.setCursor(10, 10);
+  display.println("ACCESO");
+  display.setCursor(10, 30);
+  display.println(permitido ? "PERMITIDO" : "DENEGADO");
+  display.setTextSize(1);
+  display.setCursor(90, 50);
+  display.println(permitido ? ":)" : ":(");
+  display.display();
+  delay(5000);
+  display.clearDisplay();
+  display.drawBitmap(0, 0, logo, SCREEN_WIDTH, SCREEN_HEIGHT, WHITE);
+  display.display();
+}
+
+void mostrarMensaje(String linea1, String linea2) {
+  display.clearDisplay();
+  display.setTextSize(2);
+  display.setTextColor(WHITE);
+  display.setCursor(10, 10);
+  display.println(linea1);
+  display.setCursor(10, 30);
+  display.println(linea2);
+  display.display();
+  delay(3000); 
+  display.clearDisplay();
+  display.drawBitmap(0, 0, logo, SCREEN_WIDTH, SCREEN_HEIGHT, WHITE);
+  display.display();
+}
+
+void enviarRegistroUID(String uid, String fecha, String hora, String facility, String estado) {
+  if (WiFi.status() == WL_CONNECTED) {
+    WiFiClient client;
+    HTTPClient http;
+    http.begin(client, "http://192.168.128.77:8080/insertar_uid.php");  
+    http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    String postData = "uid=" + uid + "&fecha=" + fecha + "&hora=" + hora + "&facility_id=" + facility + "&estado=" + estado;
+    if (http.POST(postData) > 0) {
+      Serial.println("Registro enviado: " + uid + " - " + estado);
+    } else {
+      Serial.println("Error al enviar registro.");
+    }
+    http.end();
+  }
+}
+
+int buscarReservaConsecutiva(String tagActual, int finalMinActual) {
+  if (WiFi.status() != WL_CONNECTED) return 0;
+  Serial.println("Buscando reserva consecutiva...");
+  for (int page = 1; page <= totalPages; page++) {
+    String url = String(dbUrl) + "?page=" + page + "&limit=50";
+    WiFiClient client;
+    HTTPClient http;
+    http.begin(client, url);
+    if (http.GET() > 0) {
+      DynamicJsonDocument doc(4096);
+      if (!deserializeJson(doc, http.getString())) {
+        for (JsonObject item : doc["data"].as<JsonArray>()) {
+          String horaInicioStr = item["START_TIME"];
+          int inicioMinNuevo = horaInicioStr.substring(0, 2).toInt() * 60 + horaInicioStr.substring(3, 5).toInt();
+          if (item["FACILITY_ID"] == "CR-4.1" &&
+              item["DATE_"] == serverDate &&
+              item["TAG"] == tagActual &&
+              inicioMinNuevo == finalMinActual) {
+            Serial.println("Reserva consecutiva encontrada!");
+            String horaFinalStr = item["END_TIME"];
+            int finalMinNuevo = horaFinalStr.substring(0, 2).toInt() * 60 + horaFinalStr.substring(3, 5).toInt();
+            http.end();
+            return finalMinNuevo;
+          }
+        }
+      }
+    }
+    http.end();
+  }
+  Serial.println("No se encontró reserva consecutiva.");
+  return 0;
 }
 
 void buzzSound(int repeticiones, int tiempoDelay) {
@@ -55,13 +207,12 @@ String leerUID() {
     }
     uidTag.toUpperCase();
     Serial.println("UID detectado: " + uidTag);
-    rfid.PICC_HaltA();     // "Apaga" la tarjeta y la mantiene asi hasta que se retire y se vuelva a ubicar.
-    rfid.PCD_StopCrypto1(); // Limpia estado interno
+    rfid.PICC_HaltA();   
+    rfid.PCD_StopCrypto1();
     delay(2000);
   }
   return uidTag;
 }
-
 
 void enviarActivacion(int estado) {
   if (estado == 0){
@@ -71,7 +222,7 @@ void enviarActivacion(int estado) {
   if (WiFi.status() != WL_CONNECTED) return;
   for (const char* url : controlUrls) {
     WiFiClient client;
-    client.setTimeout(2); // 2 segundos
+    client.setTimeout(2);
     HTTPClient http;
     http.begin(client, url);
     http.addHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -84,25 +235,17 @@ void setup() {
   Serial.begin(115200);
   SPI.begin();
   rfid.PCD_Init();
-
   pinMode(buzzer, OUTPUT);
   digitalWrite(buzzer, HIGH);
-  pinMode(PIN_BOTON, INPUT);  // Pulsador con resistencia
-
-  // ------------------------------
-  // Conexión a WiFi
-  // ------------------------------
+  pinMode(PIN_BOTON, INPUT);  
   Serial.println("Conectando al WiFi...");
   WiFi.begin(ssid, password);
-
-  // esperar conexión
   int intentos = 0;
   while (WiFi.status() != WL_CONNECTED && intentos < 20) {
     delay(500);
     Serial.print(".");
     intentos++;
   }
-
   if (WiFi.status() == WL_CONNECTED) {
     Serial.println("\nWiFi conectado!");
     Serial.print("Dirección IP: ");
@@ -110,208 +253,186 @@ void setup() {
   } else {
     Serial.println("\nNo se pudo conectar al WiFi.");
   }
+  if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
+    Serial.println("No se encontró la pantalla OLED");
+    while (true);
+  }
+  display.clearDisplay();
+  display.drawBitmap(0, 0, logo, SCREEN_WIDTH, SCREEN_HEIGHT, WHITE);
+  display.display();
 }
 
-
+// --- LOOP PRINCIPAL ---
 void loop() {
-
-  //
-  if ((digitalRead(PIN_BOTON) == LOW) && !tarjetaInvalida && !accesoPermitido) {  // Verifica si el botón está presionado (tarjeta presente). Este loop verifica si la tarjeta está en el sistema
+ 
+  // CASO 1: Se inserta una tarjeta para validación
+  if ((digitalRead(PIN_BOTON) == LOW) && !tarjetaInvalida && !accesoPermitido) { 
     tarjetaInvalida = true;
-    Serial.println("Pulsador presionado. ");
+    mostrarMensaje("LEYENDO", "TARJETA...");
     String tag = leerUID();
-    tagAnterior = tag;
     
-    if (WiFi.status() == WL_CONNECTED) {
-      for (int page = 1; page <= totalPages; page++) {
-        String url = String(dbUrl) + "?page=" + page + "&limit=50";
-        WiFiClient client;
-        HTTPClient http;
-        http.begin(client, url);
-        int code = http.GET();
-        if (code > 0) {
-          DynamicJsonDocument doc(4096);
-          if (!deserializeJson(doc, http.getString())) {
-            if (page == 1) {
-              totalPages = doc["total_pages"] | 1;
-              serverDate = String(doc["server_date"]).substring(0, 10);
-              serverTime = String(doc["server_date"]).substring(11, 16);
-              int hour = serverTime.substring(0, 2).toInt();
-              int minute = serverTime.substring(3, 5).toInt(); 
-              serverMinutes = hour * 60 + minute;  
-            }
-            for (JsonObject item : doc["data"].as<JsonArray>()) {
-              // Extraer horas como string
-              String horaInicioStr = item["START_TIME"]; // ej. "09:00"
-              String horaFinalStr  = item["END_TIME"];   // ej. "11:30"
-            
-              // Convertir a minutos desde medianoche
-              horaInicioMin = horaInicioStr.substring(0, 2).toInt() * 60 +
-                              horaInicioStr.substring(3, 5).toInt();
-              horaFinalMin  = horaFinalStr.substring(0, 2).toInt() * 60 +
-                              horaFinalStr.substring(3, 5).toInt();
-
-              if (item["FACILITY_ID"] == "CR-4.4" &&
-              item["DATE_"] == serverDate &&
-              item["TAG"] == tag &&
-              serverMinutes >= horaInicioMin &&
-              serverMinutes < horaFinalMin) {
-                accesoPermitido = true;
-                tarjetaInvalida = false;
-                Serial.println("xupame el huevo diego");
-                return;
-                //break;
+    if (tag != "") { // Solo proceder si se leyó un tag
+      tagAnterior = tag;
+    
+      if (WiFi.status() == WL_CONNECTED) {
+        for (int page = 1; page <= totalPages; page++) {
+          String url = String(dbUrl) + "?page=" + page + "&limit=50";
+          WiFiClient client;
+          HTTPClient http;
+          http.begin(client, url);
+          if (http.GET() > 0) {
+            DynamicJsonDocument doc(4096);
+            if (!deserializeJson(doc, http.getString())) {
+              if (page == 1) {
+                totalPages = doc["total_pages"] | 1;
+                serverDate = String(doc["server_date"]).substring(0, 10);
+                serverTime = String(doc["server_date"]).substring(11, 16);
+                serverMinutes = serverTime.substring(0, 2).toInt() * 60 + serverTime.substring(3, 5).toInt();
+              }
+              for (JsonObject item : doc["data"].as<JsonArray>()) {
+                String horaInicioStr = item["START_TIME"];
+                String horaFinalStr  = item["END_TIME"]; 
+                
+                horaInicioMin = horaInicioStr.substring(0, 2).toInt() * 60 + horaInicioStr.substring(3, 5).toInt();
+                horaFinalMin  = horaFinalStr.substring(0, 2).toInt() * 60 + horaFinalStr.substring(3, 5).toInt();
+  
+                // <<--- MODIFICACIÓN: Se restan 5 minutos para permitir ingreso anticipado
+                if (item["FACILITY_ID"] == "CR-4.1" && item["DATE_"] == serverDate &&
+                    item["TAG"] == tag && serverMinutes >= (horaInicioMin - 5) && serverMinutes < horaFinalMin) {
+                      accesoPermitido = true;
+                      tarjetaInvalida = false;
+                      
+                      Serial.println("Acceso Válido. Enviando registro de INGRESO.");
+                      enviarRegistroUID(tag, serverDate, serverTime, "CR-4.1", "Ingreso");
+                      mostrarAcceso(true);
+                      
+                      http.end();
+                      return;
+                }
               }
             }
           }
-        }
-        http.end();
-        //if (accesoPermitido) break;
-      }
-    }
-  }
-//=========================================================================
-//
-//
-//=========================================================================
-else if ((digitalRead(PIN_BOTON) == LOW) && accesoPermitido) {
-  Serial.println("Acceso permitido. Ejecutando activación...");
-  enviarActivacion(1);  // activa los equipos
-  tarjetaInvalida = false;
-  accesoPermitido = false;
-  int tiempoActual = serverMinutes;
-
-  // While: mientras no se pase del tiempo final de reserva
-  while (tiempoActual < horaFinalMin) {
-    if (digitalRead(PIN_BOTON) == HIGH) {
-      retiroTarjeta = true;
-      Serial.println("Tarjeta retirada antes del fin de la reserva.");
-      break;
-    }
-    Serial.println("Reserva activa...");
-    delay(30000); // Espera 30 segundos antes de volver a consultar el tiempo
-
-    // Actualizar hora actual desde el servidor
-    if (WiFi.status() == WL_CONNECTED) {
-      WiFiClient client;
-      HTTPClient http;
-      http.begin(client, dbUrl);
-      int code = http.GET();
-      if (code > 0) {
-        DynamicJsonDocument doc(1024);
-        if (!deserializeJson(doc, http.getString())) {
-          String nuevaHora = String(doc["server_date"]).substring(11, 16);
-          int hour = nuevaHora.substring(0, 2).toInt();
-          int minute = nuevaHora.substring(3, 5).toInt(); 
-          tiempoActual = hour * 60 + minute;
+          http.end();
         }
       }
-      http.end();
+
+      // Si el bucle termina y el acceso no fue permitido
+      if(!accesoPermitido){
+          Serial.println("Acceso no autorizado. Enviando registro 'no auth'.");
+          enviarRegistroUID(tag, serverDate, serverTime, "CR-4.1", "no auth");
+          mostrarAcceso(false);
+      }
+    } else { // Si no se pudo leer un tag, no hacer nada y reiniciar el estado
+      tarjetaInvalida = false;
     }
   }
-  if (retiroTarjeta) {
-    retiroTarjeta = false;
-    int contadorCiclo = 0;
-    const int numeroCiclo = 12;
-    const int delayCiclo = 5000; // en milisegundos, se repite el numero de veces que corra el ciclo, en caso de 12ciclos de 5s, seria 60 s
+
+  // CASO 2: La tarjeta es válida y la sesión está activa
+  else if ((digitalRead(PIN_BOTON) == LOW) && accesoPermitido) {
+    Serial.println("Acceso permitido. Ejecutando activación...");
+    enviarActivacion(1);
+    tarjetaInvalida = false;
+    accesoPermitido = false;
   
-    while (digitalRead(PIN_BOTON) == HIGH) {
-      Serial.println("Reinserte la tarjeta.");
-      buzzSound(2, 200);
-      delay(delayCiclo);
-      if (contadorCiclo == (numeroCiclo - 1)) {
-        Serial.println("Iniciando apagado.");
-        enviarActivacion(0);
-        return;
+    bool sesionActiva = true;
+    while (sesionActiva) {
+      int tiempoActual = serverMinutes;
+  
+      while (tiempoActual < horaFinalMin) {
+        if (digitalRead(PIN_BOTON) == HIGH) {
+          retiroTarjeta = true;
+          Serial.println("Tarjeta retirada antes del fin. Enviando registro de RETIRO.");
+          enviarRegistroUID(tagAnterior, serverDate, serverTime, "CR-4.1", "Retiro");
+          sesionActiva = false;
+          break;
+        }
+        
+        Serial.println("Reserva activa... Tiempo restante: " + String(horaFinalMin - tiempoActual) + " min.");
+        delay(30000);
+  
+        if (WiFi.status() == WL_CONNECTED) {
+          WiFiClient client;
+          HTTPClient http;
+          http.begin(client, dbUrl);
+          if (http.GET() > 0) {
+            DynamicJsonDocument doc(1024);
+            if (!deserializeJson(doc, http.getString())) {
+              String nuevaHora = String(doc["server_date"]).substring(11, 16);
+              serverTime = nuevaHora;
+              tiempoActual = nuevaHora.substring(0, 2).toInt() * 60 + nuevaHora.substring(3, 5).toInt();
+            }
+          }
+          http.end();
+        }
       }
-      contadorCiclo += 1;
+  
+      if (!sesionActiva) break;
+  
+      int nuevaHoraFinalMin = buscarReservaConsecutiva(tagAnterior, horaFinalMin);
+  
+      if (nuevaHoraFinalMin > 0) {
+        Serial.println("Extendiendo la sesión. Nueva hora final: " + String(nuevaHoraFinalMin / 60) + ":" + String(nuevaHoraFinalMin % 60));
+        mostrarMensaje("RESERVA", "EXTENDIDA");
+        horaFinalMin = nuevaHoraFinalMin;
+      } else {
+        sesionActiva = false;
+      }
     }
-
-    delay(5000); //dealy de 5 segundos para que se inserte la tarjeta correctamente.
-    String nuevoTag = leerUID();
-
-    if (nuevoTag == tagAnterior) {
-      // tarjeta válida, continuar
-      Serial.println("Tarjeta Valida Reinsertada");
-      return;
+  
+    if (retiroTarjeta) {
+      retiroTarjeta = false;
+      int contadorCiclo = 0;
+      const int numeroCiclo = 12;
+      const int delayCiclo = 5000;
+     
+      while (digitalRead(PIN_BOTON) == HIGH) {
+        mostrarMensaje("REINSERTE", "TARJETA");
+        buzzSound(2, 200);
+        delay(delayCiclo);
+        if (contadorCiclo >= (numeroCiclo - 1)) {
+          Serial.println("Tiempo de espera agotado. Iniciando apagado.");
+          enviarActivacion(0);
+          return;
+        }
+        contadorCiclo++;
+      }
+  
+      delay(2000);
+      String nuevoTag = leerUID();
+  
+      if (nuevoTag == tagAnterior) {
+        Serial.println("Tarjeta Valida Reinsertada.");
+        enviarRegistroUID(nuevoTag, serverDate, serverTime, "CR-4.1", "Ingreso");
+        return; 
+      } else {
+        Serial.println("Tarjeta invalida, apagando el sistema.");
+        mostrarMensaje("TARJETA", "INCORRECTA");
+        enviarActivacion(0);
+      }
     } else {
-      Serial.println("Tarjeta invalida, apagando el sistema.");
+      Serial.println("Reserva finalizada. Enviando registro de RETIRO.");
+      enviarRegistroUID(tagAnterior, serverDate, serverTime, "CR-4.1", "Retiro");
+      mostrarMensaje("RESERVA", "FINALIZADA");
       enviarActivacion(0);
     }
+    return;
   }
-  // Cuando se termina el tiempo de reserva o se retira la tarjeta
-  Serial.println("Reserva finalizada.");
-  enviarActivacion(0);  // desactiva los equipos
-  return;
-}
-//=========================================================================
-//
-//
-//=========================================================================
-//=========================================================================
-//Caso en el que la tarjeta es invalida y permanece en el lector.
-//Cuando se quita la tarjeta invalida las variables se reinician.
-//=========================================================================
+  
+  // CASO 3: Tarjeta inválida permanece en el lector
   else if ((digitalRead(PIN_BOTON) == LOW) && tarjetaInvalida){
     const int delayCiclo = 2000;
     while (digitalRead(PIN_BOTON) == LOW) {
+      mostrarMensaje("TARJETA", "INVALIDA");
       buzzSound(2, 200);
-      Serial.println("Tarjeta invalida, retirar su tarjeta. ");
       delay(delayCiclo);  
-      }
-    tarjetaInvalida = false;   
-  }
-//=========================================================================
-//
-//
-//=========================================================================
-//=========================================================================
-//Este condicional a continuacion se encarga de verificar y corregir si una tarjeta que se ha retirado y se reinserta es la misma
-//condicion en la que se daría continuidad al uso del sistema.
-//=========================================================================
-  else if ((digitalRead(PIN_BOTON) == HIGH) && retiroTarjeta) {
-    retiroTarjeta = false;
-    int contadorCiclo = 0;
-    const int numeroCiclo = 12;
-    const int delayCiclo = 5000; // en milisegundos, se repite el numero de veces que corra el ciclo, en caso de 12ciclos de 5s, seria 60 s
-  
-    while (digitalRead(PIN_BOTON) == HIGH) {
-      Serial.println("Reinserte la tarjeta.");
-      buzzSound(2, 200);
-      delay(delayCiclo);
-      if (contadorCiclo == (numeroCiclo - 1)) {
-        Serial.println("Iniciando apagado.");
-        iniciarApagado();
-        return;
-      }
-      contadorCiclo += 1;
     }
-
-    delay(5000); //dealy de 5 segundos para que se inserte la tarjeta correctamente.
-    String nuevoTag = leerUID();
-
-    if (nuevoTag == tagAnterior) {
-      // tarjeta válida, continuar
-      Serial.println("Tarjeta Valida Reinsertada");
-      return;
-    } else {
-      Serial.println("Tarjeta invalida, apagando el sistema.");
-      iniciarApagado();
-    }
+    tarjetaInvalida = false;    
   }
-//=========================================================================
-//
-//
-//=========================================================================
+
+  // CASO 4: No hay tarjeta en el lector
   else {
-   // Si el botón no está presionado
-   Serial.println("No hay tarjeta. ");
-   delay(delayLoop * 1000);
-   return;
+    // Serial.println("Esperando tarjeta..."); // Descomentar para depuración
+    delay(delayLoop * 1000);
+    return;
   }
 }
-//=========================================================================
-//
-//
-//=========================================================================
- 
